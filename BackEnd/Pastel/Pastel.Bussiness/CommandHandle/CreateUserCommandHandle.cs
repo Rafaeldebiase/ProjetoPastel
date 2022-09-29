@@ -89,7 +89,7 @@ namespace Pastel.Handles.CommandHandle
 
             try
             {
-                var user = GenerateUser(command);
+                var user = User.UserFactory.Generate(command);
 
                 _unitOfWork.BeginTransaction();
                 await _userRepository.Save(user);
@@ -114,36 +114,6 @@ namespace Pastel.Handles.CommandHandle
             }
         }
 
-        private User GenerateUser(CreateUserCommand command)
-        {
-            var fullName = new FullName(command.FirstName, command.LastName);
-            var email = new Email(command.Email);
-            var password = new Password(command.Password);
-            var address = new Address(
-                    command.Street,
-                    command.StreetNumber,
-                    command.StreetComplement,
-                    command.Neighborhood,
-                    command.City,
-                    command.State,
-                    command.Contry,
-                    command.ZipCode
-                );
-            Enum.TryParse<Role>(command.Role, out var role);
-            Guid.TryParse(command.ManagerId, out var managerId);
-
-            return new(
-                    fullName,
-                    command.BirthDate,
-                    email,
-                    password,
-                    address,
-                    role,
-                    managerId
-                );
-
-        }
-
         private async Task<bool> FindManager(string? managerId)
         {
             Guid.TryParse(managerId, out var id);
@@ -151,7 +121,7 @@ namespace Pastel.Handles.CommandHandle
             return await _userRepository.FindManager(id);
         }
 
-        private async Task PhoneIngestion(List<Phone>? phones, Guid userId)
+        private async Task PhoneIngestion(List<Phone>? phones, Guid? userId)
         {
             var usersPhone = UserPhone.PhoneFactory.Create(phones, userId);
             foreach (var phone in usersPhone)

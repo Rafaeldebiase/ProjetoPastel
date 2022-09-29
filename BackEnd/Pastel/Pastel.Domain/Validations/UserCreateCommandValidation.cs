@@ -5,9 +5,9 @@ using Pastel.Domain.ValuesObject;
 
 namespace Pastel.Domain.Validations
 {
-    public class CreateUserCommandValidation : AbstractValidator<CreateUserCommand>
+    public class UserCreateCommandValidation : AbstractValidator<CreateUserCommand>
     {
-        public CreateUserCommandValidation()
+        public UserCreateCommandValidation()
         {
             RuleFor(field => field.FirstName)
                 .NotNull().WithMessage("O primeiro nome não pode ser nulo")

@@ -15,6 +15,12 @@ namespace Pastel.App.Controllers
             _logger = logger;
         }
 
+        [HttpGet("getphoto")]
+        public async Task<FileStreamResult> GetPhoto(Guid userId, [FromServices] IImageHandle handle)
+        {
+            return await handle.GetPhoto(userId);
+        }
+
         [HttpPost("create")]
         public async Task<ActionResult> Create([FromBody]CreateUserCommand command, 
             [FromServices] ICreateUserCommandHandle handle)
@@ -81,10 +87,65 @@ namespace Pastel.App.Controllers
             }
         }
 
-        [HttpGet("getphoto")]
-        public async Task<FileStreamResult> GetPhoto(Guid userId, [FromServices]IImageHandle handle)
+        [HttpPut("edit")]
+        public async Task<ActionResult> Edit([FromBody]UserEditCommand command,
+            [FromServices]IEditUserCommandHandle handle)
         {
-            return await handle.GetPhoto(userId);
+            try
+            {
+                if (!command.IsValid())
+                    return BadRequest(command.Errors());
+
+                var result = await handle.Edit(command);
+
+                if (result.Errors.Count > 0)
+                {
+                    return BadRequest(result);
+                }
+
+                return Ok(result);
+            }
+            catch (Exception error)
+            {
+                var message = $"{error.InnerException}\n " +
+                    $"{error.Message} \n " +
+                    $"{error.StackTrace}";
+
+                _logger.LogError(message);
+
+                return BadRequest(message);
+            }
         }
+
+        [HttpPost("delete")]
+        public async Task<ActionResult> Delete([FromBody]DeleteUserCommand command, 
+            [FromServices]IDeleteUserCommandHandle handle)
+        {
+            try
+            {
+                if (!command.IsValid())
+                    return BadRequest(command.Errors());
+
+                var result = await handle.Delete(command);
+
+                if (result.Errors.Count > 0)
+                {
+                    return BadRequest(result);
+                }
+
+                return Ok(result);
+            }
+            catch (Exception error)
+            {
+                var message = $"{error.InnerException}\n " +
+                    $"{error.Message} \n " +
+                    $"{error.StackTrace}";
+
+                _logger.LogError(message);
+
+                return BadRequest(message);
+            }
+        }
+
     }
 }

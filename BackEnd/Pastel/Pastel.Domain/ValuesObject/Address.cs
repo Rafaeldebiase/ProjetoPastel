@@ -35,7 +35,7 @@
         public Address ChangeStreet(string street) =>
             this with { Street = street };
 
-        public Address ChangeNumber(int number) =>
+        public Address ChangeNumber(int? number) =>
             this with { Number = number };
 
         public Address ChangeComplement(string complement) =>

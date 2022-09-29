@@ -18,6 +18,8 @@ builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<ICreateUserCommandHandle, CreateUserCommandHandle>();
 builder.Services.AddScoped<IImageHandle, ImageHandle>();
+builder.Services.AddScoped<IEditUserCommandHandle, EditUserCommandHandle>();
+builder.Services.AddScoped<IDeleteUserCommandHandle, DeleteUserCommandHandle>();
 
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IPhoneRepository, PhoneRepository>();

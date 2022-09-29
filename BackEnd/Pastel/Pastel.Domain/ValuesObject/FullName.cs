@@ -11,10 +11,10 @@
         public string? FirstName { get; private init; }
         public string? LastName { get; private init; }
 
-        public FullName ChangeFirstName(string firstName) =>
+        public FullName ChangeFirstName(string? firstName) =>
             this with { FirstName = firstName };
 
-        public FullName ChangeLastName(string lastName) =>
+        public FullName ChangeLastName(string? lastName) =>
             this with { LastName = lastName };
 
     }
