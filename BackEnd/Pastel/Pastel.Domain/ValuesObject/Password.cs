@@ -2,6 +2,8 @@
 {
     public record Password
     {
+        public Password(){}
+
         public Password(string? code)
         {
             Code = code;
@@ -11,5 +13,7 @@
 
         public Password ChangeCode(string code) =>
             this with { Code = code };
+
+
     }
 }

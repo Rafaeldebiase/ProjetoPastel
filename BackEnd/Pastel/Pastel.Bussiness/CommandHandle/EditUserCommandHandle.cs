@@ -14,13 +14,15 @@ namespace Pastel.Handles.CommandHandle
         private readonly ILogger<EditUserCommandHandle> _logger;
         private readonly IUserRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IPhoneRepository _phoneRepository;
 
         public EditUserCommandHandle(ILogger<EditUserCommandHandle> logger, IUserRepository repository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, IPhoneRepository phoneRepository)
         {
             _logger = logger;
             _repository = repository;
             _unitOfWork = unitOfWork;
+            _phoneRepository = phoneRepository;
         }
         public async Task<ResultDto> Edit(UserEditCommand command)
         {
@@ -28,8 +30,10 @@ namespace Pastel.Handles.CommandHandle
             try
             {
                 Guid.TryParse(command.Id, out var id);
-                var userDto = await _repository.GetUser(id);
+                var userDto = await _repository.GetUserById(id);
+
                 var user = Check(command, userDto);
+      
                 _unitOfWork.BeginTransaction();
                 await _repository.Edit(user);
                 _unitOfWork.Commit();
@@ -51,8 +55,6 @@ namespace Pastel.Handles.CommandHandle
 
                 return result;
             }
-
-
         }
 
         private User Check(UserEditCommand command, IEnumerable<UserDto> userDto)

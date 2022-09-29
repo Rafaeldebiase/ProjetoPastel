@@ -10,11 +10,13 @@ namespace Pastel.Domain.Validations
         public UserCreateCommandValidation()
         {
             RuleFor(field => field.FirstName)
-                .NotNull().WithMessage("O primeiro nome não pode ser nulo")
                 .NotEmpty().WithMessage("O campo primeiro nome não pode ser vazio");
 
             RuleFor(field => field.LastName)
                 .NotEmpty().WithMessage("O campo segundo nome não pode ser vazio");
+
+            RuleFor(field => field.BirthDate)
+                .NotEmpty().WithMessage("A data de nascimento não estar vazia");
 
             RuleFor(field => field.Email)
                 .NotEmpty().WithMessage("O campo email não pode ser vazio")

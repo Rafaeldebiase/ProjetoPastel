@@ -16,6 +16,21 @@ namespace Pastel.Data.Repositories
             _dbSession = dbSession;
         }
 
+        public async Task<bool> FindEmail(string? email)
+        {
+            var query = $@"
+                            select email {nameof(UserDto.Email)}
+                            from pastel.tb_user
+                            where email = '{email}'
+                        ";
+            var result = await _dbSession.Connection.QueryAsync<UserDto>(query);
+            
+            if (result.Any())
+                return true;
+
+            return false;
+        }
+
         public async Task<bool> FindManager(Guid id)
         {
             var query = $@"
@@ -33,7 +48,34 @@ namespace Pastel.Data.Repositories
             return true; 
         }
 
-        public async Task<IEnumerable<UserDto>> GetUser(Guid id)
+        public async Task<IEnumerable<UserDto>> GetUserByEmail(string? email)
+        {
+            var query = $@"
+                            select 
+                                id {nameof(UserDto.Id)},
+                                first_name {nameof(UserDto.FirstName)},
+                                last_name {nameof(UserDto.LastName)},
+                                birth_date {nameof(UserDto.BirthDate)},
+                                email {nameof(UserDto.Email)},
+                                pass {nameof(UserDto.Password)},
+                                street {nameof(UserDto.Street)},
+                                street_number {nameof(UserDto.StreetNumber)},
+                                street_complement {nameof(UserDto.StreetComplement)},
+                                neighborhood {nameof(UserDto.Neighborhood)},
+                                city {nameof(UserDto.City)},
+                                state {nameof(UserDto.State)},
+                                country {nameof(UserDto.Contry)},
+                                zip_code {nameof(UserDto.ZipCode)},
+                                user_role {nameof(UserDto.Role)},
+                                manager_id {nameof(UserDto.ManagerId)}
+                            from pastel.tb_user
+                            where email = '{email}'
+                        ";
+
+            return await _dbSession.Connection.QueryAsync<UserDto>(query);
+        }
+
+        public async Task<IEnumerable<UserDto>> GetUserById(Guid? id)
         {
             var query = $@"
                             select 
@@ -142,5 +184,7 @@ namespace Pastel.Data.Repositories
             await _dbSession.Connection.ExecuteAsync(query, null, _dbSession.Transaction);
 
         }
+
+        
     }
 }

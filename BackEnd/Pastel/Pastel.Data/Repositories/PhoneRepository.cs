@@ -1,7 +1,9 @@
 ﻿using Dapper;
 using Pastel.Data.Interfaces;
 using Pastel.Data.UnitOfWork;
+using Pastel.Domain.Dto;
 using Pastel.Domain.Entities;
+using Pastel.Domain.ValuesObject;
 
 namespace Pastel.Data.Repositories
 {
@@ -12,6 +14,20 @@ namespace Pastel.Data.Repositories
         public PhoneRepository(DbSession dbSession)
         {
             _dbSession = dbSession;
+        }
+
+        public async Task<IEnumerable<PhoneDto>> GetPhonesByUserId(Guid userId)
+        {
+            var query = @$"
+                            select
+                            id {nameof(PhoneDto.Id)},
+                            user_id  {nameof(PhoneDto.UserId)},
+                            phone_number {nameof(PhoneDto.Number)},
+                            phone_type {nameof(PhoneDto.Type)}
+                            from pastel.tb_phone
+                            where user_id = '{userId}'
+                        ";
+            return await _dbSession.Connection.QueryAsync<PhoneDto>(query);
         }
 
         public async Task<bool> Ingestion(UserPhone usersPhone)
@@ -29,6 +45,19 @@ namespace Pastel.Data.Repositories
                                 '{usersPhone.Number}',
                                 '{usersPhone.Type}'
                             );
+                        ";
+
+            var result = await _dbSession.Connection.ExecuteAsync(query, null, _dbSession.Transaction);
+            return result > 0;
+        }
+
+        public async Task<bool> Remove(UserPhone phone)
+        {
+            var query = $@"
+                            delete from pastel.tb_phone
+                            where user_id = '{phone.UserId}',
+                            and phone_number = '{phone.Number}'
+                            and phone_type = '{phone.Type}'
                         ";
 
             var result = await _dbSession.Connection.ExecuteAsync(query, null, _dbSession.Transaction);

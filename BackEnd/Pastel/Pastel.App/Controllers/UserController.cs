@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Pastel.Domain.Command;
 using Pastel.Domain.Dto;
 using Pastel.Handles.Interfaces;
@@ -16,12 +17,14 @@ namespace Pastel.App.Controllers
         }
 
         [HttpGet("getphoto")]
+        [Authorize]
         public async Task<FileStreamResult> GetPhoto(Guid userId, [FromServices] IImageHandle handle)
         {
             return await handle.GetPhoto(userId);
         }
 
         [HttpPost("create")]
+        [Authorize(Roles = "MANAGER")]
         public async Task<ActionResult> Create([FromBody]CreateUserCommand command, 
             [FromServices] ICreateUserCommandHandle handle)
         {
@@ -52,6 +55,7 @@ namespace Pastel.App.Controllers
         }
 
         [HttpPost("uploadphoto")]
+        [Authorize(Roles = "MANAGER")]
         public async Task<ActionResult> UploadImageAsync(Guid userId, 
             [FromServices]IImageHandle handle)
         {
@@ -88,6 +92,7 @@ namespace Pastel.App.Controllers
         }
 
         [HttpPut("edit")]
+        [Authorize(Roles = "MANAGER")]
         public async Task<ActionResult> Edit([FromBody]UserEditCommand command,
             [FromServices]IEditUserCommandHandle handle)
         {
@@ -118,6 +123,7 @@ namespace Pastel.App.Controllers
         }
 
         [HttpPost("delete")]
+        [Authorize(Roles = "MANAGER")]
         public async Task<ActionResult> Delete([FromBody]DeleteUserCommand command, 
             [FromServices]IDeleteUserCommandHandle handle)
         {
@@ -127,6 +133,68 @@ namespace Pastel.App.Controllers
                     return BadRequest(command.Errors());
 
                 var result = await handle.Delete(command);
+
+                if (result.Errors.Count > 0)
+                {
+                    return BadRequest(result);
+                }
+
+                return Ok(result);
+            }
+            catch (Exception error)
+            {
+                var message = $"{error.InnerException}\n " +
+                    $"{error.Message} \n " +
+                    $"{error.StackTrace}";
+
+                _logger.LogError(message);
+
+                return BadRequest(message);
+            }
+        }
+
+        [HttpPost("removephone")]
+        [Authorize(Roles = "MANAGER")]
+        public async Task<ActionResult> RemovePhone([FromBody]RemovePhoneCommand command,
+            [FromServices] IRemovePhoneCommandHandle handle)
+        {
+            try
+            {
+                if (!command.IsValid())
+                    return BadRequest(command.Errors());
+
+                var result = await handle.Remove(command);
+
+                if (result.Errors.Count > 0)
+                {
+                    return BadRequest(result);
+                }
+
+                return Ok(result);
+            }
+            catch (Exception error)
+            {
+                var message = $"{error.InnerException}\n " +
+                    $"{error.Message} \n " +
+                    $"{error.StackTrace}";
+
+                _logger.LogError(message);
+
+                return BadRequest(message);
+            }
+        }
+
+        [HttpPost("addphone")]
+        [Authorize(Roles = "MANAGER")]
+        public async Task<ActionResult> AddPhone([FromBody]AddPhoneCommand command,
+            [FromServices] IAddPhoneCommandHandle handle)
+        {
+            try
+            {
+                if (!command.IsValid())
+                    return BadRequest(command.Errors());
+
+                var result = await handle.Add(command);
 
                 if (result.Errors.Count > 0)
                 {

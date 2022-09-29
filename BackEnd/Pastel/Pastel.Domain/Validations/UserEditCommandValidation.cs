@@ -22,26 +22,6 @@ namespace Pastel.Domain.Validations
             RuleFor(field => field)
                 .Custom((field, context) =>
                 {
-                    if (field.Phones is not null)
-                    {
-                        if (field.Phones?.Count > 0)
-                        {
-                            foreach (var phone in field.Phones)
-                            {
-                                if (!string.IsNullOrEmpty(phone?.Number))
-                                {
-                                    var check = Enum.TryParse<PhoneType>(phone.Type, false, out var typePhone);
-                                    if (!check)
-                                        context.AddFailure("O campo tipo do telefone não foi informado corretamente");
-                                }
-                            }
-                        }
-                    }
-                });
-
-            RuleFor(field => field)
-                .Custom((field, context) =>
-                {
                     if (!string.IsNullOrEmpty(field.Role))
                     {
                         if (field.Role == Enum.GetName<Role>(Role.USER))

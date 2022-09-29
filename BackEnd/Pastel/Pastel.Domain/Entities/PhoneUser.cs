@@ -29,14 +29,13 @@ namespace Pastel.Domain.Entities
                     yield return new(type, phone.Number, userId);
                 }
             }
-                
 
-            public static IEnumerable<UserPhone> ChangePhone(List<UserPhone> phones, UserPhone oldPhone, 
-                string newNumber, PhoneType newType, Guid userId)
+            public static UserPhone Generate(Phone phone, Guid userId)
             {
-                phones.Remove(oldPhone);
-                phones.Add(new(newType, newNumber, userId));
-                return phones;
+                Enum.TryParse<PhoneType>(phone.Type, out var type);
+
+                var userPhone = new UserPhone(type, phone.Number, userId);
+                return userPhone;
             }
         }
     }

@@ -14,7 +14,7 @@ namespace Pastel.Handles.CommandHandle
     public class CreateUserCommandHandle : ICreateUserCommandHandle
     {
         private readonly ILogger<CreateUserCommandHandle> _logger;
-        private readonly IUserRepository _userRepository;
+        private readonly IUserRepository _repository;
         private readonly IPhoneRepository _phoneRepository;
         private readonly IUnitOfWork _unitOfWork;
 
@@ -22,7 +22,7 @@ namespace Pastel.Handles.CommandHandle
             IPhoneRepository phoneRepository, IUnitOfWork unitOfWork)
         {
             _logger = logger;
-            _userRepository = userRepository;
+            _repository = userRepository;
             _phoneRepository = phoneRepository;
             _unitOfWork = unitOfWork;
         }
@@ -89,10 +89,17 @@ namespace Pastel.Handles.CommandHandle
 
             try
             {
+                var checkEmail = await _repository.FindEmail(command.Email);
+                if (checkEmail)
+                {
+                    result.AddError("Email já cadastrado");
+                    return result;
+                }
+
                 var user = User.UserFactory.Generate(command);
 
                 _unitOfWork.BeginTransaction();
-                await _userRepository.Save(user);
+                await _repository.Save(user);
                 await PhoneIngestion(command.Phones, user.Id);
                 _unitOfWork.Commit();
 
@@ -118,7 +125,7 @@ namespace Pastel.Handles.CommandHandle
         {
             Guid.TryParse(managerId, out var id);
 
-            return await _userRepository.FindManager(id);
+            return await _repository.FindManager(id);
         }
 
         private async Task PhoneIngestion(List<Phone>? phones, Guid? userId)

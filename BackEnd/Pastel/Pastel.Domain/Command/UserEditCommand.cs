@@ -9,7 +9,6 @@ namespace Pastel.Domain.Command
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Email { get; set; }
-        public List<Phone>? Phones { get; set; }
         public string? Street { get; set; }
         public int? StreetNumber { get; set; }
         public string? StreetComplement { get; set; }
