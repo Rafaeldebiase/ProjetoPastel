@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Pastel.Data.Interfaces;
 using Pastel.Domain.Command;
 using Pastel.Domain.Dto;
 using Pastel.Handles.Interfaces;
@@ -21,6 +22,28 @@ namespace Pastel.App.Controllers
         public async Task<FileStreamResult> GetPhoto(Guid userId, [FromServices] IImageHandle handle)
         {
             return await handle.GetPhoto(userId);
+        }
+
+        [HttpGet("managers")]
+        public async Task<ActionResult> GetManagers([FromServices]IUserRepository repository)
+        {
+            try
+            {
+                var result = await repository.GetManagers();
+                result.ToArray();
+
+                return Ok(result);
+            }
+            catch (Exception error)
+            {
+                var message = $"{error.InnerException}\n " +
+                    $"{error.Message} \n " +
+                    $"{error.StackTrace}";
+
+                _logger.LogError(message);
+
+                return BadRequest(message);
+            }
         }
 
         [HttpPost("create")]

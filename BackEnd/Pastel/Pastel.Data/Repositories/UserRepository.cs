@@ -16,6 +16,22 @@ namespace Pastel.Data.Repositories
             _dbSession = dbSession;
         }
 
+        public async Task<IEnumerable<ManagersDto>> GetManagers()
+        {
+            var query = $@"
+                            select 
+                            id {nameof(ManagersDto.Id)},
+                            first_name {nameof(ManagersDto.FirstName)},
+                            last_name {nameof(ManagersDto.LastName)}
+                            from pastel.tb_user
+                            where user_role = '{Enum.GetName(Role.MANAGER)}'
+                        ";
+
+            var x = await _dbSession.Connection.QueryAsync<ManagersDto>(query);
+
+            return x.ToList();
+        }
+
         public async Task<bool> FindEmail(string? email)
         {
             var query = $@"
@@ -185,6 +201,6 @@ namespace Pastel.Data.Repositories
 
         }
 
-        
+     
     }
 }

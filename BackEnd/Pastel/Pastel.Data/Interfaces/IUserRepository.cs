@@ -5,6 +5,7 @@ namespace Pastel.Data.Interfaces
 {
     public interface IUserRepository
     {
+        Task<IEnumerable<ManagersDto>> GetManagers();
         Task<bool> FindManager(Guid id);
         Task<bool> FindEmail(string? email);
         Task<IEnumerable<UserDto>> GetUserById(Guid? id);

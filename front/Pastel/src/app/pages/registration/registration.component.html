@@ -1,0 +1,138 @@
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <div class="card card-cadastro">
+            <div class="card-header">
+                <h1>
+                    Cadastro de usuários
+                </h1>
+                <nav class="navbar navbar-light bg-light">
+                    <div class="container-fluid">
+                        <form class="d-flex">
+                            <input class="form-control me-2" type="search" placeholder="pesquisar" aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit">Pesquisar</button>
+                        </form>
+                    </div>
+                </nav>
+            </div>
+            <div class="card-body">
+                <div [formGroup]="form">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control inputs" id="nome" placeholder="Nome"
+                            formControlName="firstName">
+                        <label for="floatingInput">Nome</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control inputs" id="sobrenome" placeholder="Sobrenome"
+                            formControlName="lastName">
+                        <label for="floatingInput">Sobrenome</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control inputs" id="email" placeholder="name@example.com"
+                            formControlName="email">
+                        <label for="floatingInput">Email</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control inputs" id="password" placeholder="senha"
+                            formControlName="password">
+                        <label for="floatingPassword">Senha</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control inputs" id="street" placeholder="logradouro"
+                            formControlName="street">
+                        <label for="floatingInput">Logradouro</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control inputs" id="number" placeholder="numero"
+                            formControlName="streetNumber">
+                        <label for="floatingInput">Numero</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control inputs" id="complement" placeholder="Complemento"
+                            formControlName="streetComplement">
+                        <label for="floatingInput">Complemento</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control inputs" id="neighborhood" placeholder="Bairro"
+                            formControlName="neighborhood">
+                        <label for="floatingInput">Bairro</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control inputs" id="city" placeholder="cidade"
+                            formControlName="city">
+                        <label for="floatingInput">Cidade</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control inputs" id="state" placeholder="estado"
+                            formControlName="state">
+                        <label for="floatingInput">Estado</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control inputs" id="contry" placeholder="País"
+                            formControlName="contry">
+                        <label for="floatingInput">País</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control inputs" id="zipCode" placeholder="Cep"
+                            formControlName="zipCode">
+                        <label for="floatingInput">Cep</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="date" class="form-control inputs" id="birthDate" placeholder="Data de nascimento"
+                            formControlName="birthDate">
+                        <label for="floatingInput">Data de nascimento</label>
+                    </div>
+                    <div class="phone">
+                        <label class="add-phone">Adicionar telefone</label>
+                        <button mat-mini-fab (click)="addPhone()">
+                            <mat-icon class="add-course-btn">add</mat-icon>
+                        </button>
+                    </div>
+                    <ng-container formArrayName="phones">
+                        <ng-container *ngFor="let phone of phones.controls; let i = index">
+                            <div class="card container-phone">
+                                <div [formGroupName]="i">
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select form-select-lg mb-3 inputs"
+                                            aria-label=".form-select-lg example" formControlName="phoneType"
+                                            id="foneType">
+                                            <option selected disabled>Selecione o tipo do telefone</option>
+                                            <option [value]="mobileType">{{mobileType}}</option>
+                                            <option [value]="landlineType">{{landlineType}}</option>
+                                        </select>
+                                        <label for="floatingInput">Selecione o tipo</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control inputs" id="telefone"
+                                            placeholder="Telefone" formControlName="phoneNumber">
+                                        <label for="floatingInput">Telefone</label>
+                                    </div>
+                                    <mat-icon class="delete-btn" (click)="deletePhone(i)">
+                                        delete_forever
+                                    </mat-icon>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                    <label for="floatingInput">Selecione a função</label>
+                    <select class="form-select form-select-lg mb-3 inputs" aria-label=".form-select-lg example"
+                        formControlName="role" (change)="checkRole()" id="role">
+                        <option selected disabled>Selecione a função</option>
+                        <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
+                    </select>
+                    <ng-container *ngIf="managerVisible">
+                        <label for="floatingInput">Selecione o gestor</label>
+                        <select class="form-select form-select-lg mb-3 inputs" aria-label=".form-select-lg example"
+                            formControlName="managerId" id="managerId">
+                            <option disabled selected>Selecione o gestor</option>
+                            <option *ngFor="let manager of managers" [value]="manager.id">{{manager.firstName}}
+                                {{manager.lastName}}</option>
+                        </select>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button (click)="register()">ok</button>
+            </div>
+        </div>
+    </div>
+</div>

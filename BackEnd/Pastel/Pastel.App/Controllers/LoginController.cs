@@ -17,7 +17,7 @@ namespace Pastel.App.Controllers
         }
 
         [HttpPost]
-        [Route("autenticate")]
+        [Route("auth")]
         [AllowAnonymous]
         public async Task<ActionResult<dynamic>> Authenticate([FromBody]AutenticateCommand command,
             [FromServices]IAutenticateCommandHandle handle, [FromServices]IConfiguration configuration)
