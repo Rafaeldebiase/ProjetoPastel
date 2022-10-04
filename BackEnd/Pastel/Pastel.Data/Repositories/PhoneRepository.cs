@@ -3,7 +3,6 @@ using Pastel.Data.Interfaces;
 using Pastel.Data.UnitOfWork;
 using Pastel.Domain.Dto;
 using Pastel.Domain.Entities;
-using Pastel.Domain.ValuesObject;
 
 namespace Pastel.Data.Repositories
 {
@@ -16,18 +15,18 @@ namespace Pastel.Data.Repositories
             _dbSession = dbSession;
         }
 
-        public async Task<IEnumerable<PhoneDto>> GetPhonesByUserId(Guid userId)
+        public async Task<IEnumerable<PhoneUserDto>> GetPhonesByUserId(Guid userId)
         {
             var query = @$"
                             select
-                            id {nameof(PhoneDto.Id)},
-                            user_id  {nameof(PhoneDto.UserId)},
-                            phone_number {nameof(PhoneDto.Number)},
-                            phone_type {nameof(PhoneDto.Type)}
+                            id {nameof(PhoneUserDto.Id)},
+                            user_id  {nameof(PhoneUserDto.UserId)},
+                            phone_number {nameof(PhoneUserDto.Number)},
+                            phone_type {nameof(PhoneUserDto.Type)}
                             from pastel.tb_phone
                             where user_id = '{userId}'
                         ";
-            return await _dbSession.Connection.QueryAsync<PhoneDto>(query);
+            return await _dbSession.Connection.QueryAsync<PhoneUserDto>(query);
         }
 
         public async Task<bool> Ingestion(UserPhone usersPhone)
@@ -55,7 +54,7 @@ namespace Pastel.Data.Repositories
         {
             var query = $@"
                             delete from pastel.tb_phone
-                            where user_id = '{phone.UserId}',
+                            where user_id = '{phone.UserId}'
                             and phone_number = '{phone.Number}'
                             and phone_type = '{phone.Type}'
                         ";

@@ -16,21 +16,6 @@ namespace Pastel.Data.Repositories
             _dbSession = dbSession;
         }
 
-        public async Task<IEnumerable<PhoneDto>> GetUserPhone(Guid userId)
-        {
-            var query = $@"
-                            select 
-                            id {nameof(PhoneDto.Id)},
-                            user_id {nameof(PhoneDto.UserId)},
-                            phone_number {nameof(PhoneDto.Number)},
-                            phone_type {nameof(PhoneDto.Type)}
-                            from pastel.tb_phone
-                            where user_id = '{userId}'
-                        ";
-
-            return await _dbSession.Connection.QueryAsync<PhoneDto>(query);
-        }
-
         public async Task<IEnumerable<UserTaskDto>> GetUsers(Guid managerId)
         {
             var query = $@"

@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Role } from 'src/app/role';
-import { RoutesHttpService } from 'src/app/routes-http.service';
 import { TokenService } from 'src/app/token.service';
-import { IDelete } from './delete';
-import { Itask as ITask } from './task';
-import { IUserTask } from './userTask';
 import { DatePipe } from '@angular/common';
 import { IUser } from 'src/app/user';
-import { IRegistration } from '../registration/registration';
-import { IManager } from '../registration/manager';
-import { IRole } from '../registration/role';
-import { DomSanitizer } from '@angular/platform-browser';
-import { IPhone } from '../registration/phone';
-import { PhoneType } from '../registration/phoneType';
+import { IUserTask } from 'src/app/shared/userTask';
+import { IRegistration } from 'src/app/shared/registration';
+import { IRole } from 'src/app/shared/iRole';
+import { IManager } from 'src/app/shared/manager';
+import { PhoneType } from 'src/app/shared/phoneType';
+import { IPhone } from 'src/app/shared/phone';
+import { Itask } from 'src/app/shared/task';
+import { Role } from 'src/app/shared/role';
+import { RoutesHttpService } from 'src/app/routes-http.service';
+import { IDelete } from 'src/app/shared/delete';
+
 
 
 declare var window: any;
@@ -42,7 +42,7 @@ export class UserComponent implements OnInit {
   public formUser!: FormGroup;
   public formTask!: FormGroup;
   public formPhone!: FormGroup;
-  public newTask!: ITask;
+  public newTask!: Itask;
   public managers!: IManager[];
   public landlineType: PhoneType = PhoneType.LANDLINE;
   public mobileType: PhoneType = PhoneType.MOBILE;
@@ -53,7 +53,7 @@ export class UserComponent implements OnInit {
 
   private _user!: IUser;
   private _phone!: IPhone;
-  private _task!: ITask;
+  private _task!: Itask;
   private _role!: string;
   private _idManager!: string;
   private _idUser: string = '';
@@ -65,7 +65,7 @@ export class UserComponent implements OnInit {
     private _snack: MatSnackBar,
     private _datePipe: DatePipe
   ) {
-    this.newTask = {} as ITask;
+    this.newTask = {} as Itask;
     this.registration = {} as IRegistration;
     this.roles = [{} as IRole];
     this._phone = {} as IPhone;
@@ -287,7 +287,7 @@ export class UserComponent implements OnInit {
     this.newTask = this.formTask.value;
     this.newTask.userId = this._idUser;
 
-    this._http.postTask(this.newTask).subscribe({
+    this._http.addTask(this.newTask).subscribe({
       next: data => {
         if (data.obj != undefined) {
           this._snack.open('Tarefa criada com sucesso', '', { panelClass: ["snack-sucess"] })
@@ -511,7 +511,7 @@ export class UserComponent implements OnInit {
     this._idUser = idUser;
   }
 
-  openEditTaskModal(task: ITask) {
+  openEditTaskModal(task: Itask) {
     this.edit = true;
     this._task = task;
     const date = this._datePipe.transform(task.deadline, 'yyyy-MM-dd');

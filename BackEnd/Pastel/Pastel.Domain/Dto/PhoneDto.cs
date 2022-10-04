@@ -1,12 +1,14 @@
-﻿using Pastel.Domain.Enums;
-
-namespace Pastel.Domain.Dto
+﻿namespace Pastel.Domain.Dto
 {
     public record PhoneDto
     {
-        public Guid Id { get; init; }
-        public Guid? UserId { get; init; }
-        public PhoneType? Type { get; init; }
+        public PhoneDto(string? number, string? type)
+        {
+            Number = number;
+            Type = type;
+        }
+
         public string? Number { get; init; }
+        public string? Type { get; init; }
     }
 }

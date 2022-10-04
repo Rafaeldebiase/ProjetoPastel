@@ -19,7 +19,7 @@ namespace Pastel.App.Controllers
 
         [HttpGet("getphoto")]
         [Authorize]
-        public async Task<FileStreamResult> GetPhone(Guid userId, [FromServices] IImageHandle handle)
+        public async Task<FileStreamResult> GetPhoto(Guid userId, [FromServices] IImageHandle handle)
         {
 
             var result = await handle.GetPhoto(userId);
@@ -27,15 +27,14 @@ namespace Pastel.App.Controllers
         }
 
 
-        [HttpGet("getphoto")]
+        [HttpGet("getphone")]
         [Authorize]
-        public async Task<ActionResult> GetPhoto(Guid userId, [FromServices]IUserRepository repository)
+        public async Task<ActionResult> GetPhone(Guid userId, [FromServices]IPhoneHandle handle)
         {
 
             try
             {
-                var result = new ResultDto();
-                result.AddObject(await repository.GetUserPhone(userId));
+                var result = await handle.GetPhonesByUserId(userId);
                 return Ok(result);
             }
             catch (Exception error)

@@ -18,13 +18,6 @@ namespace Pastel.Domain.Validations
                     if (!result)
                         context.AddFailure("O id não é um Guid");
                 });
-
-            RuleFor(field => field.Number)
-                .NotEmpty().WithMessage("O campo logradouro não pode ser vazio");
-
-            RuleFor(field => field.Type)
-                .NotEmpty().WithMessage("O campo função não pode ser vazio")
-                .IsEnumName(typeof(PhoneType), false);
         }
     }
 }

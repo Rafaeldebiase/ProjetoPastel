@@ -23,21 +23,23 @@ namespace Pastel.Handles.CommandHandle
             _repository = repository;
         }
 
-        public async Task<ResultDto> Add(AddPhoneCommand command)
+        public async Task<ResultPhoneDto> Add(AddPhoneCommand command)
         {
-            var result = new ResultDto();
+            var phoneList = new ResultPhoneDto();
             try
             {
-                var phone = new Phone(command.Type, command.Number);
-                Guid.TryParse(command.UserId, out var userId);
-                var userPhone = UserPhone.PhoneFactory.Generate(phone, userId);
+                foreach (var item in command.Phones)
+                {
+                    var phone = new Phone(item.Type, item.Number);
+                    Guid.TryParse(command.UserId, out var userId);
+                    var userPhone = UserPhone.PhoneFactory.Generate(phone, userId);
 
-                _unitOfWork.BeginTransaction();
-                await _repository.Ingestion(userPhone);
-                _unitOfWork.Commit();
-
-                result.AddObject(userPhone);
-                return result;
+                    _unitOfWork.BeginTransaction();
+                    await _repository.Ingestion(userPhone);
+                    _unitOfWork.Commit();
+                    phoneList.AddPhone(item);
+                }
+                return phoneList;
             }
             catch (Exception error)
             {
@@ -48,9 +50,9 @@ namespace Pastel.Handles.CommandHandle
 
                 _logger.LogError(message);
 
-                result.AddError(message);
+                phoneList.AddErrors(message);
 
-                return result;
+                return phoneList;
             }
         }
     }

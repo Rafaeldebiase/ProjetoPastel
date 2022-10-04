@@ -1,4 +1,4 @@
-import { Role } from "src/app/role";
+import { Role } from "./role";
 
 export interface IRole {
     id: Role,

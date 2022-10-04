@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth.service';
 import { TokenService } from 'src/app/token.service';
-import { ILogin } from './ilogin';
+import { ILogin } from '../../shared/ilogin';
 
 
 @Component({

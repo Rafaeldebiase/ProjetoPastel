@@ -5,6 +5,6 @@ namespace Pastel.Handles.Interfaces
 {
     public interface IAddPhoneCommandHandle
     {
-        Task<ResultDto> Add(AddPhoneCommand command);
+        Task<ResultPhoneDto> Add(AddPhoneCommand command);
     }
 }

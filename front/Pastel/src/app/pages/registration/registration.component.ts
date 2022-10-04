@@ -2,13 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { Role } from 'src/app/role';
+import { Role } from 'src/app/shared/role';
 import { RoutesHttpService } from 'src/app/routes-http.service';
-import { IManager } from './manager';
-import { IPhone } from './phone';
-import { PhoneType } from './phoneType';
-import { IRegistration } from './registration';
-import { IRole } from './role';
+import { IManager } from '../../shared/manager';
+import { IPhone } from '../../shared/phone';
+import { PhoneType } from '../../shared/phoneType';
+import { IRegistration } from '../../shared/registration';
+import { IRole } from 'src/app/shared/iRole';
+
+
 
 @Component({
   selector: 'app-registration',
@@ -213,7 +215,7 @@ export class RegistrationComponent implements OnInit {
 
     this.registration = this.form.value;
 
-    this._http.postRegistration(this.registration).subscribe({
+    this._http.addRegistration(this.registration).subscribe({
       next: data => {
         if (this.file !== undefined) {
           this._http.upload(
