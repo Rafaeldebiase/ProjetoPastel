@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TokenService } from 'src/app/token.service';
 import { DatePipe } from '@angular/common';
-import { IUser } from 'src/app/user';
+import { IUser } from 'src/app/shared/user';
 import { IUserTask } from 'src/app/shared/userTask';
 import { IRegistration } from 'src/app/shared/registration';
 import { IRole } from 'src/app/shared/iRole';

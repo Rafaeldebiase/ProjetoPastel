@@ -28,7 +28,7 @@ import { MatInputModule } from '@angular/material/input';
 import { AuthService } from './auth.service';
 import { TokenService } from './token.service';
 import { RoutesHttpService } from './routes-http.service';
-import { authInterceptorProviders } from './auth.interceptor';
+import { authInterceptorProviders } from './shared/auth.interceptor';
 import { UserComponent } from './pages/user/user.component';
 
 

@@ -11,7 +11,7 @@ import { Itask } from './shared/task';
 import { IUserPhone } from './shared/userPhone';
 import { IUserTask } from './shared/userTask';
 import { IResponse } from './shared/response';
-import { IUserResponseDto } from './userResponseDto';
+import { IUserResponseDto } from './shared/userResponseDto';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })

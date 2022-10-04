@@ -1,4 +1,4 @@
-import { IUser } from "src/app/user";
+import { IUser } from "src/app/shared/user";
 import { Itask } from "./task";
 
 export interface IUserTask {
