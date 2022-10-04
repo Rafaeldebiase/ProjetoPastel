@@ -3,7 +3,7 @@ using Pastel.Domain.Command;
 
 namespace Pastel.Domain.Validations
 {
-    public class DeleteTaskCommandValidation : AbstractValidator<DeleteTaskCommand>
+    public class DeleteTaskCommandValidation : AbstractValidator<DeleteCommand>
     {
         public DeleteTaskCommandValidation()
         {

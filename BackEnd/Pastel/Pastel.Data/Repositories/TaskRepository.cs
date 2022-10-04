@@ -76,7 +76,6 @@ namespace Pastel.Data.Repositories
                             deadline = '{task.Deadline?.ToString("yyyyMMdd")}',
                             completed = {task.Completed}
                             where id = '{task.Id}'
-                            )
                         ";
 
             var result = await _dbSession.Connection.ExecuteAsync(query, null, _dbSession.Transaction);

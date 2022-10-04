@@ -2,6 +2,7 @@ import { IPhone } from "./phone";
 
 
 export interface IRegistration {
+    id: string,
     firstName: string,
     lastName: string,
     email: string,
@@ -13,7 +14,7 @@ export interface IRegistration {
     neighborhood: string,
     city: string,
     state: string,
-    contry: string,
+    country: string,
     zipCode: string,
     birthDate: Date,
     role: string,

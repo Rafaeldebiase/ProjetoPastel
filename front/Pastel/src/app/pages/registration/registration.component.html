@@ -5,45 +5,43 @@
                 <h1>
                     Cadastro de usuários
                 </h1>
-                <nav class="navbar navbar-light bg-light">
-                    <div class="container-fluid">
-                        <form class="d-flex">
-                            <input class="form-control me-2" type="search" placeholder="pesquisar" aria-label="Search">
-                            <button class="btn btn-outline-success" type="submit">Pesquisar</button>
-                        </form>
-                    </div>
-                </nav>
             </div>
             <div class="card-body">
                 <div [formGroup]="form">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control inputs" id="nome" placeholder="Nome"
-                            formControlName="firstName">
+                            formControlName="firstName"
+                            [class.is-invalid]="firstName.invalid && (firstName.dirty || firstName.touched)">
                         <label for="floatingInput">Nome</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control inputs" id="sobrenome" placeholder="Sobrenome"
-                            formControlName="lastName">
+                            formControlName="lastName"
+                            [class.is-invalid]="lastName.invalid && (lastName.dirty || lastName.touched)">
                         <label for="floatingInput">Sobrenome</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="email" class="form-control inputs" id="email" placeholder="name@example.com"
-                            formControlName="email">
+                            formControlName="email"
+                            [class.is-invalid]="email.invalid && (email.dirty || email.touched)">
                         <label for="floatingInput">Email</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="password" class="form-control inputs" id="password" placeholder="senha"
-                            formControlName="password">
+                            formControlName="password"
+                            [class.is-invalid]="password.invalid && (password.dirty || password.touched)">
                         <label for="floatingPassword">Senha</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control inputs" id="street" placeholder="logradouro"
-                            formControlName="street">
+                            formControlName="street"
+                            [class.is-invalid]="street.invalid && (street.dirty || street.touched)">
                         <label for="floatingInput">Logradouro</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="number" class="form-control inputs" id="number" placeholder="numero"
-                            formControlName="streetNumber">
+                            formControlName="streetNumber"
+                            [class.is-invalid]="streetNumber.invalid && (streetNumber.dirty || streetNumber.touched)">
                         <label for="floatingInput">Numero</label>
                     </div>
                     <div class="form-floating mb-3">
@@ -53,38 +51,43 @@
                     </div>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control inputs" id="neighborhood" placeholder="Bairro"
-                            formControlName="neighborhood">
+                            formControlName="neighborhood"
+                            [class.is-invalid]="neighborhood.invalid && (neighborhood.dirty || neighborhood.touched)">
                         <label for="floatingInput">Bairro</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control inputs" id="city" placeholder="cidade"
-                            formControlName="city">
+                            formControlName="city" [class.is-invalid]="city.invalid && (city.dirty || city.touched)">
                         <label for="floatingInput">Cidade</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control inputs" id="state" placeholder="estado"
-                            formControlName="state">
+                            formControlName="state"
+                            [class.is-invalid]="state.invalid && (state.dirty || state.touched)">
                         <label for="floatingInput">Estado</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control inputs" id="contry" placeholder="País"
-                            formControlName="contry">
+                            formControlName="contry"
+                            [class.is-invalid]="contry.invalid && (contry.dirty || contry.touched)">
                         <label for="floatingInput">País</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control inputs" id="zipCode" placeholder="Cep"
-                            formControlName="zipCode">
+                            formControlName="zipCode"
+                            [class.is-invalid]="zipCode.invalid && (zipCode.dirty || zipCode.touched)">
                         <label for="floatingInput">Cep</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="date" class="form-control inputs" id="birthDate" placeholder="Data de nascimento"
-                            formControlName="birthDate">
+                            formControlName="birthDate"
+                            [class.is-invalid]="birthDate.invalid && (birthDate.dirty || birthDate.touched)">
                         <label for="floatingInput">Data de nascimento</label>
                     </div>
                     <div class="phone">
                         <label class="add-phone">Adicionar telefone</label>
-                        <button mat-mini-fab (click)="addPhone()">
-                            <mat-icon class="add-course-btn">add</mat-icon>
+                        <button mat-icon-button (click)="addPhone()">
+                            <mat-icon class="add">add_circle_outline</mat-icon>
                         </button>
                     </div>
                     <ng-container formArrayName="phones">
@@ -93,7 +96,7 @@
                                 <div [formGroupName]="i">
                                     <div class="form-floating mb-3">
                                         <select class="form-select form-select-lg mb-3 inputs"
-                                            aria-label=".form-select-lg example" formControlName="phoneType"
+                                            aria-label=".form-select-lg example" formControlName="type"
                                             id="foneType">
                                             <option selected disabled>Selecione o tipo do telefone</option>
                                             <option [value]="mobileType">{{mobileType}}</option>
@@ -103,19 +106,20 @@
                                     </div>
                                     <div class="form-floating mb-3">
                                         <input type="text" class="form-control inputs" id="telefone"
-                                            placeholder="Telefone" formControlName="phoneNumber">
+                                            placeholder="Telefone" formControlName="number">
                                         <label for="floatingInput">Telefone</label>
                                     </div>
-                                    <mat-icon class="delete-btn" (click)="deletePhone(i)">
-                                        delete_forever
-                                    </mat-icon>
+                                    <button mat-icon-button (click)="deletePhone(i)">
+                                        <mat-icon class="button-phone">delete_forever</mat-icon>
+                                    </button>
                                 </div>
                             </div>
                         </ng-container>
                     </ng-container>
                     <label for="floatingInput">Selecione a função</label>
                     <select class="form-select form-select-lg mb-3 inputs" aria-label=".form-select-lg example"
-                        formControlName="role" (change)="checkRole()" id="role">
+                        formControlName="role" (change)="checkRole()" id="role"
+                        [class.is-invalid]="role.invalid && (role.dirty || role.touched)">
                         <option selected disabled>Selecione a função</option>
                         <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
                     </select>
@@ -129,9 +133,28 @@
                         </select>
                     </ng-container>
                 </div>
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">Foto</label>
+                    <input class="form-control inputs" type="file" id="foto" (change)="selectFile($event)">
+                    <img [src]="localUrl" *ngIf="localUrl" class="img-thumbnail photo">
+                </div>
             </div>
-            <div class="card-footer">
-                <button (click)="register()">ok</button>
+            <div class="card-footer d-flex justify-content-end">
+                <button mat-icon-button matTooltip="Cancelar" class="button_cancel" (click)="cancel()">
+                    <mat-icon class="cancel">
+                        close
+                    </mat-icon>
+                </button>
+                <button mat-icon-button class="button_cancel" matTooltip="Limpar" (click)="clearForm()">
+                    <mat-icon class="clear">
+                        delete_outline
+                    </mat-icon>
+                </button>
+                <button mat-icon-button class="button_done" matTooltip="concluir" (click)="register()">
+                    <mat-icon class="done">
+                        check_circle_outline
+                    </mat-icon>
+                </button>
             </div>
         </div>
     </div>

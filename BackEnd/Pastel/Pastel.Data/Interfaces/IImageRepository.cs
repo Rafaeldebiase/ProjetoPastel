@@ -7,5 +7,6 @@ namespace Pastel.Data.Interfaces
     {
         Task<bool> ImageIngestionAsync(Photo file);
         Task<IEnumerable<PhotoDto>> GetPhoto(Guid userId);
+        Task<bool> Delete(Guid id);
     }
 }

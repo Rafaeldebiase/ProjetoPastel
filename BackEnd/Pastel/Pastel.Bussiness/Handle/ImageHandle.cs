@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Pastel.Data.Interfaces;
 using Pastel.Data.UnitOfWork;
+using Pastel.Domain.Command;
 using Pastel.Domain.Dto;
 using Pastel.Domain.Entities;
 using Pastel.Handles.Interfaces;
@@ -23,15 +24,37 @@ namespace Pastel.Handles.Handle
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<FileStreamResult> GetPhoto(Guid userId)
+        public async Task<IEnumerable<FileStreamResult>> GetPhoto(Guid userId)
         {
-            var files = await _repository.GetPhoto(userId);
-            var file = files.FirstOrDefault();
-            MemoryStream memoryStream = new MemoryStream(file.Data);
-            return new FileStreamResult(memoryStream, file.ContentType);
+            try
+            {
+                var result = new List<FileStreamResult>();
+                var files = await _repository.GetPhoto(userId);
+
+                if (files.Count() <= 0)
+                {
+                    return result;
+                }
+
+                var file = files.FirstOrDefault();
+                MemoryStream memoryStream = new MemoryStream(file.Data);
+                result.Add(new FileStreamResult(memoryStream, file.ContentType));
+                return result;
+            }
+            catch (Exception error)
+            {
+                var message = $"{error.InnerException}\n " +
+                     $"{error.Message} \n " +
+                     $"{error.StackTrace}";
+
+                _logger.LogError(message);
+
+                return new List<FileStreamResult>();
+            }
+            
         }
 
-        public async Task<ResultDto> ImageIngestionAsync(IFormFile file, Guid userId)
+        public async Task<ResultDto> ImageIngestion(IFormFile file, Guid userId)
         {
             var result = new ResultDto();
             try
@@ -61,6 +84,35 @@ namespace Pastel.Handles.Handle
                 return result;
             }
 
+        }
+
+        public async Task<ResultDto> DeleteImage(DeleteCommand command)
+        {
+            var result = new ResultDto();
+            try
+            {
+                Guid.TryParse(command.Id, out var userId);
+                _unitOfWork.BeginTransaction();
+                await _repository.Delete(userId);
+                _unitOfWork.Commit();
+
+                result.AddObject(command);
+
+                return result;
+            }
+            catch (Exception error)
+            {
+                _unitOfWork.Rollback();
+                var message = $"{error.InnerException}\n " +
+                    $"{error.Message} \n " +
+                    $"{error.StackTrace}";
+
+                _logger.LogError(message);
+
+                result.AddError(message);
+
+                return result;
+            }
         }
     }
 }

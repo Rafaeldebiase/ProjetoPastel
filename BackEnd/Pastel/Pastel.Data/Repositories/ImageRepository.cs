@@ -70,6 +70,17 @@ namespace Pastel.Data.Repositories
                     return result > 0;
                 }
             }
-        }    
+        }
+
+        public async Task<bool> Delete(Guid id)
+        {
+            var query = $@"
+                            delete from pastel.tb_image
+                            where user_id = '{id}'
+                        ";
+
+            var result = await _dbSession.Connection.ExecuteAsync(query, null, _dbSession.Transaction);
+            return result > 0;
+        }
     }
 }

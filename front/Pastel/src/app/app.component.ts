@@ -10,14 +10,14 @@ import { TokenService } from './token.service';
 export class AppComponent implements OnInit {
 
   public singIn: boolean = true;
-  public singOut: boolean = true;
+  public singOut: boolean = false;
   public userName: string = "";
   
   constructor(private router: Router, private token: TokenService) {
     
   }
   ngOnInit(): void {
-    // this.isLogged();
+    this.isLogged();
   }
 
   public isLogged(): void {
@@ -47,8 +47,8 @@ export class AppComponent implements OnInit {
     this.router.navigate(['/registration']);
   }
 
-  public goToTask(): void {
-    this.router.navigate(['/task']);
+  public goToUser(): void {
+    this.router.navigate(['/user']);
   }
 
 }

@@ -26,7 +26,7 @@ namespace Pastel.Handles.CommandHandle
             _phoneRepository = phoneRepository;
             _unitOfWork = unitOfWork;
         }
-        public async Task<ResultDto> Create(CreateUserCommand command)
+        public async Task<ResultUserDto> Create(CreateUserCommand command)
         {
             try
             {
@@ -48,16 +48,16 @@ namespace Pastel.Handles.CommandHandle
 
                 _logger.LogError(message);
                 
-                var result = new ResultDto();
+                var result = new ResultUserDto();
                 result.AddError(message);
 
                 return result;
             }
         }
 
-        private async Task<ResultDto> CreateUser(CreateUserCommand command)
+        private async Task<ResultUserDto> CreateUser(CreateUserCommand command)
         {
-            var result = new ResultDto();
+            var result = new ResultUserDto();
 
             try
             {
@@ -83,9 +83,9 @@ namespace Pastel.Handles.CommandHandle
             }
         }
 
-        private async Task<ResultDto> CreateDefault(CreateUserCommand command)
+        private async Task<ResultUserDto> CreateDefault(CreateUserCommand command)
         {
-            var result = new ResultDto();
+            var result = new ResultUserDto();
 
             try
             {
@@ -103,7 +103,9 @@ namespace Pastel.Handles.CommandHandle
                 await PhoneIngestion(command.Phones, user.Id);
                 _unitOfWork.Commit();
 
-                result.AddObject(user);
+                var resultUserDto = UserDto.UserDtoFactory.GenerateFromUser(user);
+
+                result.AddUser(resultUserDto);
                 return result;
             }
             catch (Exception error)

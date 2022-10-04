@@ -9,13 +9,13 @@ namespace Pastel.Domain.Dto
             Errors = new List<string?>();
         }
 
-        public User? User { get; set; }
+        public UserDto? User { get; set; }
 
         public IList<string?> Errors { get; private set; }
 
         public void AddError(string error) => Errors.Add(error);
 
-        public void AddUser(User user)
+        public void AddUser(UserDto user)
         {
             User = user;
         }

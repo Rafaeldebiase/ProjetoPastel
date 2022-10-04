@@ -26,6 +26,8 @@ builder.Services.AddScoped<ICreateTaskCommandHandle, CreateTaskCommandHandle>();
 builder.Services.AddScoped<IEditTaskCommandHandle, EditTaskCommandHandle>();
 builder.Services.AddScoped<ICloseTaskCommandHandle, CloseTaskCommandHandle>();
 builder.Services.AddScoped<IEmailHandle, EmailHanle>();
+builder.Services.AddScoped<IUserTaskHandle, UserTaskHandle>();
+builder.Services.AddScoped<IDeleteTaskCommandHandle, DeleteTaskCommandHandle>();
 
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IPhoneRepository, PhoneRepository>();

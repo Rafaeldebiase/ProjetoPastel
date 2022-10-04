@@ -31,8 +31,17 @@ namespace Pastel.Domain.Entities
 
         public static class TaskModelFactory
         {
-            public static TaskModel Generate(string? mensagem, DateTime deadline, Guid id) =>  
-                new TaskModel(mensagem, deadline, id, false);
+            public static TaskModel Generate(string? mensagem, DateTime? deadline, Guid id, bool completed = false) =>  
+                new TaskModel(mensagem, deadline, id, completed);
+
+            public static TaskModel Generate(string? mensagem, DateTime? deadline, Guid? id, Guid? userId ,bool completed = false)
+            {
+                var task = new TaskModel(mensagem, deadline, userId, completed);
+                task.ChangeId(id);
+                return task;
+            }
+
+                
 
             public static TaskModel Generate(TaskDto? dto)
             {

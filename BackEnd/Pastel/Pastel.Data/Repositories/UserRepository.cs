@@ -16,6 +16,53 @@ namespace Pastel.Data.Repositories
             _dbSession = dbSession;
         }
 
+        public async Task<IEnumerable<PhoneDto>> GetUserPhone(Guid userId)
+        {
+            var query = $@"
+                            select 
+                            id {nameof(PhoneDto.Id)},
+                            user_id {nameof(PhoneDto.UserId)},
+                            phone_number {nameof(PhoneDto.Number)},
+                            phone_type {nameof(PhoneDto.Type)}
+                            from pastel.tb_phone
+                            where user_id = '{userId}'
+                        ";
+
+            return await _dbSession.Connection.QueryAsync<PhoneDto>(query);
+        }
+
+        public async Task<IEnumerable<UserTaskDto>> GetUsers(Guid managerId)
+        {
+            var query = $@"
+                            select
+                            u.id {nameof(UserTaskDto.Id)},
+                            u.first_name {nameof(UserTaskDto.FirstName)},
+                            u.last_name {nameof(UserTaskDto.LastName)},
+                            u.birth_date {nameof(UserTaskDto.BirthDate)},
+                            u.email {nameof(UserTaskDto.Email)},
+                            u.street {nameof(UserTaskDto.Street)},
+                            u.street_number {nameof(UserTaskDto.StreetNumber)},
+                            u.street_complement {nameof(UserTaskDto.StreetComplement)},
+                            u.neighborhood {nameof(UserTaskDto.Neighborhood)},
+                            u.city {nameof(UserTaskDto.City)},
+                            u.state {nameof(UserTaskDto.State)},
+                            u.country {nameof(UserTaskDto.Country)},
+                            u.zip_code {nameof(UserTaskDto.ZipCode)},
+                            u.user_role {nameof(UserTaskDto.Role)},
+                            u.manager_id {nameof(UserTaskDto.ManagerId)},
+                            t.id {nameof(UserTaskDto.IdTask)},
+                            t.user_id {nameof(UserTaskDto.UserIdTask)},
+                            t.message {nameof(UserTaskDto.Message)},
+                            t.deadline {nameof(UserTaskDto.Deadline)},
+                            t.completed {nameof(UserTaskDto.Completed)}
+                            from pastel.tb_user as u
+                            left join pastel.tb_task as t on t.user_id = u.id 
+                            where manager_id = '{managerId}'
+                        ";
+
+            return await _dbSession.Connection.QueryAsync<UserTaskDto>(query);
+        }
+
         public async Task<IEnumerable<ManagersDto>> GetManagers()
         {
             var query = $@"
@@ -27,9 +74,8 @@ namespace Pastel.Data.Repositories
                             where user_role = '{Enum.GetName(Role.MANAGER)}'
                         ";
 
-            var x = await _dbSession.Connection.QueryAsync<ManagersDto>(query);
+            return await _dbSession.Connection.QueryAsync<ManagersDto>(query);
 
-            return x.ToList();
         }
 
         public async Task<bool> FindEmail(string? email)
@@ -153,7 +199,7 @@ namespace Pastel.Data.Repositories
                                 '{user.Address.Neighborhood}',
                                 '{user.Address.City}',
                                 '{user.Address.State}',
-                                '{user.Address.Contry}',
+                                '{user.Address.Country}',
                                 '{user.Address.ZipCode}',
                                 '{Enum.GetName<Role>(user.Role)}',
                                 '{user.ManagerId}'
@@ -179,7 +225,7 @@ namespace Pastel.Data.Repositories
                              neighborhood = '{user.Address.Neighborhood}',
                              city = '{user.Address.City}',
                              state = '{user.Address.State}',
-                             country = '{user.Address.Contry}',
+                             country = '{user.Address.Country}',
                              zip_code = '{user.Address.ZipCode}',
                              user_role = '{Enum.GetName<Role>(user.Role)}',
                              manager_id = '{user.ManagerId}'
@@ -201,6 +247,6 @@ namespace Pastel.Data.Repositories
 
         }
 
-     
+      
     }
 }

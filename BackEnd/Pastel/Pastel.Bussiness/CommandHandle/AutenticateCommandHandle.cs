@@ -31,15 +31,17 @@ namespace Pastel.Handles.CommandHandle
                     return result;
                 }
 
-                var user = User.UserFactory.Generate(usersDto.FirstOrDefault());
-
-                if (user.Password.Code != command.Password)
+                if (usersDto?.FirstOrDefault()?.Password != command.Password)
                 {
                     result.AddError("Usuário não encontrado ou senha inválida");
                     return result;
                 }
 
-                result.AddUser(user);
+                var userAuth = UserDto.UserDtoFactory.GenerateToAuth(usersDto?.FirstOrDefault()?.FirstName,
+                    usersDto?.FirstOrDefault()?.LastName, usersDto?.FirstOrDefault()?.Role,
+                    usersDto?.FirstOrDefault()?.Id);
+
+                result.AddUser(userAuth);
                 return result;
             }
             catch (Exception error)

@@ -1,0 +1,336 @@
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <div class="card card-cadastro">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col">
+                        <h1>
+                            Usuários
+                        </h1>
+                    </div>
+                </div>
+                <nav class="navbar navbar-light bg-light">
+                    <div class="container-fluid">
+                        <form class="d-flex">
+                            <input class="form-control me-2" type="email" placeholder="Pesquisar por email"
+                                aria-label="Search">
+                            <button mat-icon-button>
+                                <mat-icon>
+                                    search
+                                </mat-icon>
+                            </button>
+                        </form>
+                    </div>
+                </nav>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" *ngFor="let user of users; let indexUser = index;">
+                        <mat-accordion>
+                            <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        {{user.userDto.firstName}} {{user.userDto.lastName}}
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <mat-action-row>
+                                    <button mat-icon-button matTooltip="Editar usuário"
+                                        (click)="openUserModal(user.userDto)">
+                                        <mat-icon class="edit">
+                                            edit
+                                        </mat-icon>
+                                    </button>
+                                    <button mat-icon-button matTooltip="Excluir usuário"
+                                        (click)="deleteUser(indexUser, user.userDto.id)">
+                                        <mat-icon class="cancel">
+                                            delete_forever
+                                        </mat-icon>
+                                    </button>
+                                </mat-action-row>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col">
+                                                <p>Tarefas</p>
+                                            </div>
+                                            <div class="col">
+                                                <button mat-icon-button matTooltip="Nova tarefa"
+                                                    (click)="openTaskModal(user.userDto.id)">
+                                                    <mat-icon class="add">
+                                                        add_circle_outline
+                                                    </mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li *ngIf="!hasTask" class="list-group-item">
+                                        Não possui tarefas
+                                    </li>
+                                    <div *ngIf="hasTask">
+                                        <li class="list-group-item"
+                                            *ngFor="let task of user.task; let indiceTask = index">
+                                            <p>{{task.message}}</p>
+                                            <P>{{task.deadline | date : 'dd/MM/yyyy'}}</P>
+                                            <button mat-icon-button matTooltip="Editar usuário"
+                                                (click)="openEditTaskModal(task)">
+                                                <mat-icon class="edit">
+                                                    edit
+                                                </mat-icon>
+                                            </button>
+                                            <button mat-icon-button matTooltip="Deletar tarefa"
+                                                (click)="deleteTask(indiceTask , user.userDto.id)">
+                                                <mat-icon class="cancel">
+                                                    delete_forever
+                                                </mat-icon>
+                                            </button>
+                                        </li>
+                                    </div>
+                                </ul>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addtaskmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="addtaskmodal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Adicionar tarefa</h5>
+                <button type="button" class="btn-close" aria-label="Close" (click)="closeTaskModal()"></button>
+            </div>
+            <div class="modal-body">
+                <div [formGroup]="formTask">
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control message" id="message" formControlName="message"
+                            [class.is-invalid]="message.invalid && (message.dirty || message.touched)"></textarea>
+                        <label for="floatingTextarea">Comments</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="date" class="form-control" id="deadline" formControlName="deadline">
+                        <label for="floatingInput">Data limite</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button mat-icon-button data-bs-dismiss="modal" (click)="closeTaskModal()">
+                    <mat-icon class="cancel">
+                        cancel
+                    </mat-icon>
+                </button>
+                <button *ngIf="!edit" mat-icon-button (click)="saveTask()">
+                    <mat-icon class="done">
+                        check_circle_outline
+                    </mat-icon>
+                </button>
+                <button *ngIf="edit" mat-icon-button (click)="editTask()">
+                    <mat-icon class="done">
+                        check_circle_outline
+                    </mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="usermodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="addtaskmodal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar usuário</h5>
+                <button type="button" class="btn-close" aria-label="Close" (click)="closeUserModal()"></button>
+            </div>
+            <div class="modal-body">
+                <div [formGroup]="formUser">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control inputs" id="nome" placeholder="Nome"
+                            formControlName="firstName"
+                            [class.is-invalid]="firstName.invalid && (firstName.dirty || firstName.touched)">
+                        <label for="floatingInput">Nome</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control inputs" id="sobrenome" placeholder="Sobrenome"
+                            formControlName="lastName"
+                            [class.is-invalid]="lastName.invalid && (lastName.dirty || lastName.touched)">
+                        <label for="floatingInput">Sobrenome</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control inputs" id="email" placeholder="name@example.com"
+                            formControlName="email"
+                            [class.is-invalid]="email.invalid && (email.dirty || email.touched)">
+                        <label for="floatingInput">Email</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control inputs" id="street" placeholder="logradouro"
+                            formControlName="street"
+                            [class.is-invalid]="street.invalid && (street.dirty || street.touched)">
+                        <label for="floatingInput">Logradouro</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control inputs" id="number" placeholder="numero"
+                            formControlName="streetNumber"
+                            [class.is-invalid]="streetNumber.invalid && (streetNumber.dirty || streetNumber.touched)">
+                        <label for="floatingInput">Numero</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control inputs" id="complement" placeholder="Complemento"
+                            formControlName="streetComplement">
+                        <label for="floatingInput">Complemento</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control inputs" id="neighborhood" placeholder="Bairro"
+                            formControlName="neighborhood"
+                            [class.is-invalid]="neighborhood.invalid && (neighborhood.dirty || neighborhood.touched)">
+                        <label for="floatingInput">Bairro</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control inputs" id="city" placeholder="cidade"
+                            formControlName="city" [class.is-invalid]="city.invalid && (city.dirty || city.touched)">
+                        <label for="floatingInput">Cidade</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control inputs" id="state" placeholder="estado"
+                            formControlName="state"
+                            [class.is-invalid]="state.invalid && (state.dirty || state.touched)">
+                        <label for="floatingInput">Estado</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control inputs" id="contry" placeholder="País"
+                            formControlName="contry"
+                            [class.is-invalid]="contry.invalid && (contry.dirty || contry.touched)">
+                        <label for="floatingInput">País</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control inputs" id="zipCode" placeholder="Cep"
+                            formControlName="zipCode"
+                            [class.is-invalid]="zipCode.invalid && (zipCode.dirty || zipCode.touched)">
+                        <label for="floatingInput">Cep</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="date" class="form-control inputs" id="birthDate" placeholder="Data de nascimento"
+                            formControlName="birthDate"
+                            [class.is-invalid]="birthDate.invalid && (birthDate.dirty || birthDate.touched)">
+                        <label for="floatingInput">Data de nascimento</label>
+                    </div>
+                    <label for="floatingInput">Função</label>
+                    <select class="form-select form-select-lg mb-3 inputs" aria-label=".form-select-lg example"
+                        formControlName="role" (change)="checkRole()" id="role"
+                        [class.is-invalid]="role.invalid && (role.dirty || role.touched)">
+                        <option selected disabled>Selecione a função</option>
+                        <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
+                    </select>
+                    <ng-container *ngIf="managerVisible">
+                        <label for="floatingInput">Gestor</label>
+                        <select class="form-select form-select-lg mb-3 inputs" aria-label=".form-select-lg example"
+                            formControlName="managerId" id="managerId">
+                            <option disabled selected>Selecione o gestor</option>
+                            <option *ngFor="let manager of managers" [value]="manager.id">{{manager.firstName}}
+                                {{manager.lastName}}</option>
+                        </select>
+                    </ng-container>
+                    <div class="mb-3">
+                        <label class="form-label">Telefones</label>
+                        <button mat-icon-button matTooltip="Editar Telefones" (click)="openPhoneModal()">
+                            <mat-icon class="edit">
+                                edit
+                            </mat-icon>
+                        </button>
+                    </div>
+                    <div class="mb-3">
+                        <label *ngIf="!photo" for="formFile" class="form-label">Foto</label>
+                        <input *ngIf="!photo" class="form-control" type="file" id="foto" (change)="selectFile($event)">
+                        <img [src]="localUrl" *ngIf="photo" class="img-thumbnail photo">
+                        <button mat-icon-button matTooltip="Deletar foto" (click)="deletePhoto()">
+                            <mat-icon class="cancel">
+                                delete_forever
+                            </mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button mat-icon-button data-bs-dismiss="modal" (click)="closeUserModal()">
+                    <mat-icon class="cancel">
+                        cancel
+                    </mat-icon>
+                </button>
+                <button mat-icon-button (click)="editUser()">
+                    <mat-icon class="done">
+                        check_circle_outline
+                    </mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="phonemodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="addtaskmodal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar telefone</h5>
+                <button type="button" class="btn-close" aria-label="Close" (click)="closePhoneModal()"></button>
+            </div>
+            <div class="modal-body">
+                <div [formGroup]="formPhone">
+                    <ng-container formArrayName="phones">
+                        <ng-container *ngFor="let phoneUser of phonesUser; let indexPhoneUser = index">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-floating mb-3">
+                                        <label for="floatingInput mb-3">Tipo</label>
+                                        <label for="floatingInput mb-3">{{phoneUser.type}}</label>
+                                        <label for="floatingInput mb-3">Número</label>
+                                        <label for="floatingInput mb-3">{{phoneUser.number}}</label>
+                                        <button mat-icon-button matTooltip="Deletar telefone">
+                                            <mat-icon class="cancel">
+                                                delete_forever
+                                            </mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngFor="let phone of phones.controls; let i = index">
+                            <div [formGroupName]="i">
+                                <div class="form-floating mb-3">
+                                    <select class="form-select form-select-lg mb-3 inputs"
+                                        aria-label=".form-select-lg example" formControlName="type" id="foneType">
+                                        <option selected disabled>Selecione o tipo do telefone</option>
+                                        <option [value]="mobileType">{{mobileType}}</option>
+                                        <option [value]="landlineType">{{landlineType}}</option>
+                                    </select>
+                                    <label for="floatingInput">Selecione o tipo</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control inputs" id="telefone" placeholder="Telefone"
+                                        formControlName="number">
+                                    <label for="floatingInput">Telefone</label>
+                                </div>
+                                <button mat-icon-button (click)="deletePhone(i)">
+                                    <mat-icon class="button-phone">delete_forever</mat-icon>
+                                </button>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button mat-icon-button data-bs-dismiss="modal" (click)="closePhoneModal()">
+                    <mat-icon class="cancel">
+                        cancel
+                    </mat-icon>
+                </button>
+                <div class="phone">
+                    <label class="add-phone">Adicionar telefone</label>
+                    <button mat-icon-button (click)="addPhone()">
+                        <mat-icon class="add">add_circle_outline</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

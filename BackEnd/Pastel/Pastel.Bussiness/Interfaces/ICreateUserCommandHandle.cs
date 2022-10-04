@@ -5,6 +5,6 @@ namespace Pastel.Handles.Interfaces
 {
     public interface ICreateUserCommandHandle
     {
-        Task<ResultDto> Create(CreateUserCommand command);
+        Task<ResultUserDto> Create(CreateUserCommand command);
     }
 }

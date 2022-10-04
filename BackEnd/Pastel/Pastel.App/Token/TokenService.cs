@@ -1,5 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using Pastel.Domain.Entities;
+using Pastel.Domain.Dto;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -8,7 +8,7 @@ namespace Pastel.App.Token
 {
     public class TokenService
     {
-        public static string GenerateToken(User? user, string secret)
+        public static string GenerateToken(UserDto? user, string secret)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(secret);
@@ -16,8 +16,8 @@ namespace Pastel.App.Token
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.FullName.FirstName.ToString()),
-                    new Claim(ClaimTypes.Surname, user.FullName.LastName.ToString()),
+                    new Claim(ClaimTypes.Name, user.FirstName.ToString()),
+                    new Claim(ClaimTypes.Surname, user.LastName.ToString()),
                     new Claim(ClaimTypes.Role, user.Role.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddHours(2),

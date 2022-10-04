@@ -5,6 +5,6 @@ namespace Pastel.Handles.Interfaces
 {
     public interface IDeleteTaskCommandHandle
     {
-        Task<ResultDto> Delete(DeleteTaskCommand command);
+        Task<ResultDto> Delete(DeleteCommand command);
     }
 }

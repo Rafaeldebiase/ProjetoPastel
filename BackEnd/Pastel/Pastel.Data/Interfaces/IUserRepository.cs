@@ -10,6 +10,8 @@ namespace Pastel.Data.Interfaces
         Task<bool> FindEmail(string? email);
         Task<IEnumerable<UserDto>> GetUserById(Guid? id);
         Task<IEnumerable<UserDto>> GetUserByEmail(string? email);
+        Task<IEnumerable<UserTaskDto>> GetUsers(Guid managerId);
+        Task<IEnumerable<PhoneDto>> GetUserPhone(Guid userId);
 
         Task<bool> Save(User user);
         Task Edit(User user);

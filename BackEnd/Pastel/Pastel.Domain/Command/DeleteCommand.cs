@@ -2,7 +2,7 @@
 
 namespace Pastel.Domain.Command
 {
-    public class DeleteTaskCommand
+    public class DeleteCommand
     {
         public string? Id { get; set; }
 

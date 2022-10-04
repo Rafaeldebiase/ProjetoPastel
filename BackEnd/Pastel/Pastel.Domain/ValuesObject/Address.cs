@@ -19,7 +19,7 @@
             Neighborhood = neighborhood;
             City = city;
             State = state;
-            Contry = contry;
+            Country = contry;
             ZipCode = zipCode;
         }
         
@@ -29,7 +29,7 @@
         public string? Neighborhood { get; private init; }
         public string? City { get; private init; }
         public string? State { get; private init; }
-        public string? Contry { get; private init; }
+        public string? Country { get; private init; }
         public string? ZipCode { get; private init; }
 
         public Address ChangeStreet(string street) =>
@@ -51,7 +51,7 @@
             this with { State = state };
 
         public Address ChangeCountry(string country) =>
-            this with { Contry = country };
+            this with { Country = country };
 
         public Address ChangeZipCode(string zipCode) =>
             this with { ZipCode = zipCode };

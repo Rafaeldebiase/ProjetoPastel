@@ -85,13 +85,13 @@ namespace Pastel.App.Controllers
             try
             {
                 if (!command.IsValid())
-                    return BadRequest(command.Errors());
+                    return Ok(command.Errors());
 
                 var result = await handle.Edit(command);
 
                 if (result.Errors.Count > 0)
                 {
-                    return BadRequest(result);
+                    return Ok(result);
                 }
 
                 return Ok(result);
@@ -110,7 +110,7 @@ namespace Pastel.App.Controllers
 
         [HttpPost("delete")]
         [Authorize(Roles = "MANAGER")]
-        public async Task<ActionResult> Delete([FromBody]DeleteTaskCommand command,
+        public async Task<ActionResult> Delete([FromBody]DeleteCommand command,
             [FromServices]IDeleteTaskCommandHandle handle)
         {
             try
@@ -122,7 +122,7 @@ namespace Pastel.App.Controllers
 
                 if (result.Errors.Count > 0)
                 {
-                    return BadRequest(result);
+                    return Ok(result);
                 }
 
                 return Ok(result);

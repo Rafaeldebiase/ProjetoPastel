@@ -2,3 +2,33 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.done {
+    color: #43A047;
+}
+
+.edit { 
+    color: #FFA000;
+}
+
+.add {
+    color: #5E35B1;
+}
+
+.cancel {
+    color: #D32F2F;
+}
+
+.clear {
+    color: #FDD835;
+}
+
+.snack-error {
+    background-color: #D84315;
+    color: white;
+}
+
+.snack-sucess {
+    background-color: #388E3C;
+    color: white;
+}

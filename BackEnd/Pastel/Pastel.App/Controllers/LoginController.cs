@@ -36,8 +36,10 @@ namespace Pastel.App.Controllers
             return Ok(
                     new
                     {
-                        user = resultUserDto?.User?.FullName.FirstName,
-                        token = token
+                        user = resultUserDto?.User?.FirstName,
+                        token = token,
+                        id = resultUserDto?.User?.Id,
+                        role = resultUserDto?.User?.Role
                     }
                 );
         }

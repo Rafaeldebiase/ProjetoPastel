@@ -21,7 +21,7 @@ namespace Pastel.Handles.CommandHandle
             _repository = repository;
         }
 
-        public async Task<ResultDto> Delete(DeleteTaskCommand command)
+        public async Task<ResultDto> Delete(DeleteCommand command)
         {
             var result = new ResultDto();
             try

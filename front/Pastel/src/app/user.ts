@@ -1,0 +1,17 @@
+export interface IUser {
+    id: string, 
+    firstName : string,
+    lastName : string,
+    email : string,
+    street : string,
+    streetNumber : number,
+    streetComplement : string,
+    neighborhood : string,
+    city : string,
+    state : string,
+    contry : string,
+    zipCode : string,
+    birthDate : string,
+    role : string,
+    managerId : string,
+}

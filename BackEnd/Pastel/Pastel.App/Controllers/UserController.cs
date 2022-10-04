@@ -19,12 +19,62 @@ namespace Pastel.App.Controllers
 
         [HttpGet("getphoto")]
         [Authorize]
-        public async Task<FileStreamResult> GetPhoto(Guid userId, [FromServices] IImageHandle handle)
+        public async Task<FileStreamResult> GetPhone(Guid userId, [FromServices] IImageHandle handle)
         {
-            return await handle.GetPhoto(userId);
+
+            var result = await handle.GetPhoto(userId);
+            return result.FirstOrDefault();
+        }
+
+
+        [HttpGet("getphoto")]
+        [Authorize]
+        public async Task<ActionResult> GetPhoto(Guid userId, [FromServices]IUserRepository repository)
+        {
+
+            try
+            {
+                var result = new ResultDto();
+                result.AddObject(await repository.GetUserPhone(userId));
+                return Ok(result);
+            }
+            catch (Exception error)
+            {
+                var message = $"{error.InnerException}\n " +
+                   $"{error.Message} \n " +
+                   $"{error.StackTrace}";
+
+                _logger.LogError(message);
+
+                return BadRequest(message);
+
+            }
+        }
+
+        [HttpGet("getUsers")]
+        [Authorize]
+        public async Task<ActionResult> GetUsers(Guid managerId, [FromServices] IUserTaskHandle handle)
+        {
+            try
+            {
+                return Ok(await handle.GetUsers(managerId));
+            }
+            catch (Exception error)
+            {
+                var message = $"{error.InnerException}\n " +
+                   $"{error.Message} \n " +
+                   $"{error.StackTrace}";
+
+                _logger.LogError(message);
+
+                return BadRequest(message);
+
+            }
+            
         }
 
         [HttpGet("managers")]
+        [Authorize]
         public async Task<ActionResult> GetManagers([FromServices]IUserRepository repository)
         {
             try
@@ -92,8 +142,39 @@ namespace Pastel.App.Controllers
 
                 if(file.ContentType.Contains("image/jpeg") || file.ContentType.Contains("image/png"))
                 {
-                    result = await handle.ImageIngestionAsync(file, userId);
+                    result = await handle.ImageIngestion(file, userId);
                 }
+
+                if (result.Errors.Count > 0)
+                {
+                    return BadRequest(result);
+                }
+
+                return Ok(result);
+            }
+            catch (Exception error)
+            {
+                var message = $"{error.InnerException}\n " +
+                    $"{error.Message} \n " +
+                    $"{error.StackTrace}";
+
+                _logger.LogError(message);
+
+                return BadRequest(message);
+            }
+        }
+
+        [HttpPost("deletephoto")]
+        [Authorize(Roles = "MANAGER")]
+        public async Task<ActionResult> DeletePhoto([FromBody] DeleteCommand command,
+            [FromServices] IImageHandle handle)
+        {
+            try
+            {
+                if (!command.IsValid())
+                    return BadRequest(command.Errors());
+
+                var result = await handle.DeleteImage(command);
 
                 if (result.Errors.Count > 0)
                 {

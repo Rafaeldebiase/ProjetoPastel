@@ -17,59 +17,23 @@ namespace Pastel.Handles.Handle
             _logger = logger;
         }
 
-        //public bool Send(string? email, string subject, string template)
-        //{
-        //    try
-        //    {
-        //        var _mailMessage = new MailMessage();
-        //        _mailMessage.From = new MailAddress("evolutiondraft@gmail.com");
-        //        _mailMessage.To.Add("rafael.biase@inovvi.com.br");
-        //        _mailMessage.Subject = "Email de ativação";
-        //        _mailMessage.IsBodyHtml = true;
-        //        _mailMessage.Body = $"teste";
-
-        //        SmtpClient _smtpClient = new SmtpClient("smtp.gmail.com", Convert.ToInt32("587"));
-
-        //        _smtpClient.UseDefaultCredentials = false;
-        //        _smtpClient.Credentials = new NetworkCredential("evolutiondraft@gmail.com", "stxhpuunmtdeijze");
-
-        //        _smtpClient.EnableSsl = true;
-
-        //        _smtpClient.Send(_mailMessage);
-
-        //        return true;
-
-        //    }
-        //    catch (Exception error)
-        //    {
-        //        var message = $"{error.InnerException}\n " +
-        //           $"{error.Message} \n " +
-        //           $"{error.StackTrace}";
-
-        //        _logger.LogError(message);
-
-        //        return false;
-        //    }
-        //}
-
         public bool Send(string? email, string subject, string template)
         {
             try
             {
-                //Send();
                 var _mailMessage = new MailMessage();
-                _mailMessage.From = new MailAddress("automatico.pastel@inovvi.com.br");
-                _mailMessage.To.Add("rafaelvitaldebiase@gmail.com");
-                _mailMessage.Subject = subject;
+                _mailMessage.From = new MailAddress("evolutiondraft@gmail.com");
+                _mailMessage.To.Add("rafael.biase@inovvi.com.br");
+                _mailMessage.Subject = "Email de ativação";
                 _mailMessage.IsBodyHtml = true;
-                _mailMessage.Body = template;
+                _mailMessage.Body = $"teste";
 
-                SmtpClient _smtpClient = new SmtpClient("smtp.umbler.com", Convert.ToInt32("587"));
+                SmtpClient _smtpClient = new SmtpClient("smtp.gmail.com", Convert.ToInt32("587"));
 
                 _smtpClient.UseDefaultCredentials = false;
-                _smtpClient.Credentials = new NetworkCredential("automatico.pastel@inovvi.com.br", "R12345678@");
+                _smtpClient.Credentials = new NetworkCredential("evolutiondraft@gmail.com", "stxhpuunmtdeijze");
 
-                _smtpClient.EnableSsl = false;
+                _smtpClient.EnableSsl = true;
 
                 _smtpClient.Send(_mailMessage);
 

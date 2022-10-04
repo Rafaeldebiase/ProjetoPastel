@@ -3,6 +3,8 @@ import { Subject } from 'rxjs';
 
 const TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
+const ID_KEY = 'auth-user-id';
+const ROLE_KEY = 'auth-user-role';
 
 @Injectable({
   providedIn: 'root'
@@ -38,5 +40,23 @@ export class TokenService {
     }
 
     return {};
+  }
+
+  public saveId(id: string): void {
+    window.sessionStorage.removeItem(ID_KEY);
+    window.sessionStorage.setItem(ID_KEY, id);
+  }
+
+  public getId(): any {
+    return window.sessionStorage.getItem(ID_KEY);
+  }
+
+  public saveRole(role: string): void {
+    window.sessionStorage.removeItem(ROLE_KEY);
+    window.sessionStorage.setItem(ROLE_KEY, role);
+  }
+
+  public getRole(): any {
+    return window.sessionStorage.getItem(ROLE_KEY);
   }
 }
