@@ -41,20 +41,23 @@ namespace Pastel.Handles.CommandHandle
                 }
 
                 var task = TaskModel.TaskModelFactory.Generate(tasksDto.FirstOrDefault());
-                var usersDto = await _userRepository.GetUserById(id);
+                var usersDto = await _userRepository.GetUserById(task.UserId);
                 var user = User.UserFactory.Generate(usersDto.FirstOrDefault());
                 var managersDto = await _userRepository.GetUserById(user.ManagerId);
-                var manager = User.UserFactory.Generate(managersDto.FirstOrDefault());
 
-                task.ChangeCompleted(true);
+                var taskStatusChanged = task.ChangeCompleted(command.Completed);
 
                 _unitOfWork.BeginTransaction();
-                await _repository.Close(task);
+                await _repository.Close(taskStatusChanged);
                 _unitOfWork.Commit();
 
-                var template = _emailHandle.CompletedTaskEmailTemplate(task, manager.FullName, user.FullName);
-                var subject = "Tarefa concluida";
-                _emailHandle.Send(manager.Email.Address, subject, template);
+                if(managersDto.Any())
+                {
+                    var manager = User.UserFactory.Generate(managersDto.FirstOrDefault());
+                    var template = _emailHandle.CompletedTaskEmailTemplate(task, manager.FullName, user.FullName);
+                    var subject = "Alteração de status";
+                    _emailHandle.Send(manager.Email.Address, subject, template);
+                }
 
                 result.AddObject(task);
                 return result;

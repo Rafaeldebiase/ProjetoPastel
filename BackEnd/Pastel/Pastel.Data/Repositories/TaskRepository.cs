@@ -15,6 +15,23 @@ namespace Pastel.Data.Repositories
             _dbSession = dbSession;
         }
 
+        public async Task<IEnumerable<TaskDto>> GetTaskByUserId(Guid userId)
+        {
+            var query = $@"
+                            select 
+                            id {nameof(TaskDto.Id)},
+                            user_id {nameof(TaskDto.UserId)},
+                            message {nameof(TaskDto.Message)},
+                            deadline {nameof(TaskDto.Deadline)},
+                            completed {nameof(TaskDto.Completed)}
+                            from pastel.tb_task
+                            where user_id = '{userId}'
+                        ";
+
+            return await _dbSession.Connection.QueryAsync<TaskDto>(query);
+
+        }
+
         public async Task<IEnumerable<TaskDto>> GetTaskById(Guid id)
         {
             var query = $@"

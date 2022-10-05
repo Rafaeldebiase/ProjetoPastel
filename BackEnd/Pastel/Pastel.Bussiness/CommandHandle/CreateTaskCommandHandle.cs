@@ -53,7 +53,7 @@ namespace Pastel.Handles.CommandHandle
                     var subject = "Nova tarefa";
                     _emailHandle.Send(user.Email.Address, subject, template);
 
-                    result.AddObject(command);
+                    result.AddObject(task);
                     return result;
                 }
 

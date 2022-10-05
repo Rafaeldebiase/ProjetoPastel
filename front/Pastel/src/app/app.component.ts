@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Route, Router } from '@angular/router';
+import { AuthGuard } from './Guards/auth.guard';
+import { Role } from './shared/role';
 import { TokenService } from './token.service';
 
 @Component({
@@ -12,19 +14,26 @@ export class AppComponent implements OnInit {
   public singIn: boolean = true;
   public singOut: boolean = false;
   public userName: string = "";
-  
-  constructor(private router: Router, private token: TokenService) {
-    
+  public isManager: boolean = false;
+
+  constructor(
+    private router: Router,
+    private auth: AuthGuard,
+    private token: TokenService
+  ) {
+
   }
   ngOnInit(): void {
     this.isLogged();
   }
 
   public isLogged(): void {
-    this.token.logged.subscribe(response => {
+    this.auth.logged.subscribe(response => {
       this.singIn = !response;
       this.singOut = response;
       this.userName = this.token.getUser();
+      this.isManager = this.token.isManager();
+
     });
   }
 
@@ -33,6 +42,7 @@ export class AppComponent implements OnInit {
     this.singIn = true;
     this.singOut = false;
     this.userName = "";
+    this.router.navigate(['/login'])
   }
 
   public goToHome(): void {
@@ -49,6 +59,14 @@ export class AppComponent implements OnInit {
 
   public goToUser(): void {
     this.router.navigate(['/user']);
+  }
+
+  public goToTask(): void {
+    this.router.navigate(['/task']);
+  }
+
+  public goToAbout(): void {
+    this.router.navigate(['/about']);
   }
 
 }

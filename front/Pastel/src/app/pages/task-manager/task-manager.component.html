@@ -1,0 +1,83 @@
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <div class="card card-cadastro">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col">
+                        <h1>
+                            Gestão das tarefas
+                        </h1>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" *ngIf="tasksUser.length === 0">
+                        <p>Não possuí tarefas</p>
+                    </li>
+                    <div class="card">
+                        <ng-container *ngFor="let task of tasksUser; let i = index">
+                            <li class="list-group-item">
+                                <div class="card-body">
+                                    <p>{{task.message}}</p>
+                                    <p>{{task.deadline | date : 'dd/MM/yyyy' }}</p>
+                                </div>
+                                <mat-slide-toggle class="example-mar"
+                                    [checked]="task.completed"
+                                    (change)="ChangedStatus(task, $event)">
+                                    Concluido
+                                </mat-slide-toggle>
+                                <div class="card-footer" *ngIf="isManager">
+                                    <button mat-icon-button matTooltip="Excluir tarefa" (click)="deleteTask(i, task)">
+                                        <mat-icon class="cancel">
+                                            delete_forever
+                                        </mat-icon>
+                                    </button>
+                                    <button mat-icon-button>
+                                        <mat-icon class="done" matTooltip="Salvar">
+                                            check_circle_outline
+                                        </mat-icon>
+                                    </button>
+                                </div>
+                            </li>
+                        </ng-container>
+                    </div>
+                </ul>
+            </div>
+            <mat-accordion *ngIf="isManager">
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Adicionar tarefa
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div [formGroup]="formTask">
+                        <div [formGroup]="formTask">
+                            <div class="form-floating mb-3">
+                                <textarea class="form-control message" id="message" formControlName="message"
+                                    [class.is-invalid]="message.invalid && (message.dirty || message.touched)"></textarea>
+                                <label for="floatingTextarea">Comments</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="date" class="form-control" id="deadline" formControlName="deadline">
+                                <label for="floatingInput">Data limite</label>
+                            </div>
+                        </div>
+                    </div>
+                    <mat-action-row>
+                        <button mat-icon-button class="button_cancel" matTooltip="Limpar" (click)="clearTaskFrom()">
+                            <mat-icon class="clear">
+                                delete_outline
+                            </mat-icon>
+                        </button>
+                        <button mat-icon-button class="button_done" matTooltip="concluir" (click)="saveTask()">
+                            <mat-icon class="done">
+                                check_circle_outline
+                            </mat-icon>
+                        </button>
+                    </mat-action-row>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+    </div>
+</div>

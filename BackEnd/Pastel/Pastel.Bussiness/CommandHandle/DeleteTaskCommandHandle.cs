@@ -28,10 +28,17 @@ namespace Pastel.Handles.CommandHandle
             {
                 Guid.TryParse(command.Id, out var userId);
                 _unitOfWork.BeginTransaction();
-                await _repository.Delete(userId);
+                var response = await _repository.Delete(userId);
                 _unitOfWork.Commit();
 
-                result.AddObject(command);
+                if(response)
+                {
+                    result.AddObject(command);
+                }
+                else
+                {
+                    result.AddError("Não foi possível exluir a tarefa");
+                }
 
                 return result;
             }

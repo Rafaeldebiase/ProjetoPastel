@@ -31,14 +31,24 @@
             Home
           </button>
         </mat-list-item>
-        <mat-list-item>
+        <mat-list-item *ngIf="isManager">
           <button mat-flat-button (click)="goToRegistration()">
             Cadastro
           </button>
         </mat-list-item>
-        <mat-list-item>
+        <mat-list-item *ngIf="isManager">
           <button mat-flat-button (click)="goToUser()">
             Usuarios e tarefas
+          </button>
+        </mat-list-item>
+        <mat-list-item>
+          <button mat-flat-button (click)="goToTask()">
+            Gestão das tarefas
+          </button>
+        </mat-list-item>
+        <mat-list-item>
+          <button mat-flat-button (click)="goToAbout()">
+            Sobre
           </button>
         </mat-list-item>
       </mat-nav-list>

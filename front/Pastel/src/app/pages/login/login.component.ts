@@ -77,7 +77,6 @@ export class LoginComponent implements OnInit {
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.roles = this.token.getUser().roles;
-        this.token.logged.next(true);
         this.cancel();
       },
       error: err => {

@@ -5,6 +5,7 @@ namespace Pastel.Domain.Command
     public record CloseTaskCommand
     {
         public string? Id { get; init; }
+        public bool? Completed { get; init; }
 
         public bool IsValid() => new CloseTaskCommandValidation().Validate(this).IsValid;
 

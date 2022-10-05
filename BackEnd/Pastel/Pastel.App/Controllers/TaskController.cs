@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Pastel.Data.Interfaces;
 using Pastel.Domain.Command;
 using Pastel.Handles.Interfaces;
 
@@ -13,6 +14,28 @@ namespace Pastel.App.Controllers
         public TaskController(ILogger<TaskController> logger)
         {
             _logger = logger;
+        }
+
+        [HttpGet("gettasks")]
+        [Authorize]
+        public async Task<ActionResult> GetTasks(Guid userId, [FromServices] ITaskRepository repository)
+        {
+            try
+            {
+                var result = await repository.GetTaskByUserId(userId);
+
+                return Ok(result);
+            }
+            catch (Exception error)
+            {
+                var message = $"{error.InnerException}\n " +
+                    $"{error.Message} \n " +
+                    $"{error.StackTrace}";
+
+                _logger.LogError(message);
+
+                return BadRequest(message);
+            }
         }
 
         [HttpPost("close")]

@@ -24,12 +24,16 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { AuthService } from './auth.service';
 import { TokenService } from './token.service';
 import { RoutesHttpService } from './routes-http.service';
 import { authInterceptorProviders } from './shared/auth.interceptor';
 import { UserComponent } from './pages/user/user.component';
+import { TaskManagerComponent } from './pages/task-manager/task-manager.component';
+import { AuthGuard } from './Guards/auth.guard';
+import { AboutComponent } from './pages/about/about.component';
 
 
 
@@ -40,7 +44,9 @@ import { UserComponent } from './pages/user/user.component';
     LoginComponent,
     HomeComponent,
     RegistrationComponent,
-    UserComponent
+    UserComponent,
+    TaskManagerComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +66,8 @@ import { UserComponent } from './pages/user/user.component';
     MatDatepickerModule,
     MatFormFieldModule,
     MatNativeDateModule,
-    MatInputModule
+    MatInputModule,
+    MatSlideToggleModule
   ],
   providers: [
     AuthService, 
@@ -68,7 +75,8 @@ import { UserComponent } from './pages/user/user.component';
     RoutesHttpService,
     authInterceptorProviders,
     {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}},
-    DatePipe
+    DatePipe,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })

@@ -12,6 +12,7 @@ import { IUserPhone } from './shared/userPhone';
 import { IUserTask } from './shared/userTask';
 import { IResponse } from './shared/response';
 import { IUserResponseDto } from './shared/userResponseDto';
+import { ICloseTask } from './shared/closeTask';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -26,6 +27,10 @@ export class RoutesHttpService {
 
 
   constructor(private http: HttpClient) { }
+
+  public getTasks(userId: string): Observable<Itask[]> {
+    return this.http.get<Itask[]>(this.API + `Task/gettasks?userId=${userId}`);
+  }
 
   public getManagers(): Observable<IManager[]> {
     return this.http.get<IManager[]>(this.API + 'User/managers');
@@ -53,6 +58,10 @@ export class RoutesHttpService {
 
   public editTask(data: Itask): Observable<IResponse> {
     return this.http.put<IResponse>(this.API + 'Task/edit', data, httpOptions);
+  }
+
+  public checkTask(data: ICloseTask): Observable<IResponse> {
+    return this.http.post<IResponse>(this.API + 'Task/close', data, httpOptions);
   }
 
   public upload(file: File, id: string): Observable<IResponse> {   
