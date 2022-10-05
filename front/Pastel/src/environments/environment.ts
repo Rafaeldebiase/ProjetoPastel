@@ -4,9 +4,10 @@
 
 export const environment = {
   production: false,
-  url: 'https://localhost:7185/api/v1/'
+  url: 'https://pastel-gestao.herokuapp.com/api/v1/'
 };
 
+// url: 'https://localhost:7185/api/v1/'
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
