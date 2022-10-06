@@ -22,6 +22,7 @@ namespace Pastel.App.Controllers
         public async Task<ActionResult<dynamic>> Authenticate([FromBody]AutenticateCommand command,
             [FromServices]IAutenticateCommandHandle handle, [FromServices]IConfiguration configuration)
         {
+            //valida 
             if (!command.IsValid())
                 return BadRequest(command.Errors());
 
